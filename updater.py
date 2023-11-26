@@ -3,7 +3,7 @@
 import argparse
 import ipify
 import godaddy
-import timestamp
+import utils
 
 parser = argparse.ArgumentParser(
     description="Check current domain A record and update if necessary"
@@ -20,11 +20,15 @@ godaddy_connector = godaddy.GoDaddy(
     api_key=args.api_key, timeout=args.timeout, verbose=args.verbose)
 
 recordIp = godaddy_connector.get_a_record(domain=args.domain)
+if args.verbose:
+    print(f"{utils.timestamp()} Current A record: {recordIp.ip}")
+
 currentIp = ipify_connector.get_current_ip()
+
 
 if currentIp.ip != recordIp.ip:
     if args.verbose:
-        print(f"{timestamp.TimeStamp.get_timestamp()} Updating {
+        print(f"{utils.timestamp()} Updating {
               args.domain} A record to {currentIp.ip}")
 
     godaddy_connector.update_a_record(
@@ -34,4 +38,4 @@ if currentIp.ip != recordIp.ip:
     )
 else:
     if args.verbose:
-        print(timestamp.TimeStamp.get_timestamp(), "No update required")
+        print(utils.timestamp(), "No update required")

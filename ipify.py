@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 import requests
 import pydantic
-import timestamp
+import utils
 
 
 class IPifyResponseModel(pydantic.BaseModel):
@@ -17,14 +17,14 @@ class IP:
     ip: str
 
 
-class IPify(timestamp.TimeStamp):  # pylint: disable=too-few-public-methods
+class IPify(utils.Verbose):  # pylint: disable=too-few-public-methods
     """Interact with the IPify REST API. For more information see https://www.ipify.org"""
 
     _IPIFY_API_ENDPOINT = "https://api.ipify.org/?format=json"
 
     def __init__(self, timeout: int = 10, verbose: bool = False):
         self.timeout = timeout
-        self.verbose = verbose
+        super().__init__(verbose)
 
     def get_current_ip(self) -> IP:
         """Get current IP address
@@ -35,9 +35,7 @@ class IPify(timestamp.TimeStamp):  # pylint: disable=too-few-public-methods
             url=self._IPIFY_API_ENDPOINT,
             timeout=self.timeout
         )
-        if self.verbose:
-            print(self.get_timestamp(),
-                  response.request.url, response.status_code)
+        self.printer(f"{response.request.url} {response.status_code}")
 
         response.raise_for_status()
 

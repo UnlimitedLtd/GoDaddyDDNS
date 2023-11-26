@@ -3,34 +3,36 @@
 from dataclasses import dataclass
 import requests
 import pydantic
-import timestamp
+import utils
 
 
-class GoDaddy(timestamp.TimeStamp):
+class ARecordResponseModel(pydantic.BaseModel):
+    """Domain A record response model"""
+    data: str
+    name: str
+    ttl: int
+    type: str
+
+
+@dataclass
+class ARecord:
+    """Holds data for a domain's DNS A record"""
+    ip: str
+    ttl: int
+
+
+class GoDaddy(utils.Verbose):
     """Interact with the GoDaddy REST API. For more information see https://developer.godaddy.com"""
 
     _GODADDY_API_ENDPOINT = "https://api.godaddy.com/v1/domains/{domain}/records/A/@"
 
-    class ARecordResponseModel(pydantic.BaseModel):
-        """Domain A record response model"""
-        data: str
-        name: str
-        ttl: int
-        type: str
-
-    @dataclass
-    class ARecord:
-        """Holds data for a domain's DNS A record"""
-        ip: str
-        ttl: int
-
     def __init__(self, api_key: str, timeout: int = 10, verbose: bool = False):
         self.timeout = timeout
-        self.verbose = verbose
         self.headers = {
             "Authorization": f"sso-key {api_key}",
             "Content-Type": "application/json"
         }
+        super().__init__(verbose)
 
     def get_a_record(self, domain: str) -> ARecord:
         """Get a domain's DNS A record
@@ -43,14 +45,12 @@ class GoDaddy(timestamp.TimeStamp):
             timeout=self.timeout,
             headers=self.headers
         )
-        if self.verbose:
-            print(self.get_timestamp(),
-                  response.request.url, response.status_code)
+        self.printer(f"{response.request.url} {response.status_code}")
 
         response.raise_for_status()
 
         parsed = pydantic.TypeAdapter(
-            list[self.ARecordResponseModel]).validate_json(response.content)
+            list[ARecordResponseModel]).validate_json(response.content)
         if len(parsed) == 0:
             raise ValueError(
                 "No A records were found."
@@ -60,7 +60,7 @@ class GoDaddy(timestamp.TimeStamp):
                 "More than one A record present. Multiple A records not currently supported."
             )
 
-        a_record = self.ARecord(
+        a_record = ARecord(
             ip=parsed[0].data,
             ttl=parsed[0].ttl
         )
@@ -85,8 +85,6 @@ class GoDaddy(timestamp.TimeStamp):
                 }
             ]
         )
-        if self.verbose:
-            print(self.get_timestamp(),
-                  response.request.url, response.status_code)
+        self.printer(f"{response.request.url} {response.status_code}")
 
         response.raise_for_status()
