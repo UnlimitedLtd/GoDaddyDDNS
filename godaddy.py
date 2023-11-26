@@ -26,10 +26,10 @@ class GoDaddy(utils.Verbose):
 
     _GODADDY_API_ENDPOINT = "https://api.godaddy.com/v1/domains/{domain}/records/A/@"
 
-    def __init__(self, api_key: str, timeout: int = 10, verbose: bool = False):
+    def __init__(self, api_key: str, api_secret: str, timeout: int = 10, verbose: bool = False):
         self.timeout = timeout
         self.headers = {
-            "Authorization": f"sso-key {api_key}",
+            "Authorization": f"sso-key {api_key}:{api_secret}",
             "Content-Type": "application/json"
         }
         super().__init__(verbose)
