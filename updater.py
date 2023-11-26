@@ -24,7 +24,7 @@ currentIp = ipify_connector.get_current_ip()
 
 if currentIp.ip != recordIp.ip:
     if args.verbose:
-        print(f"{timestamp.get_timestamp()} Updating {
+        print(f"{timestamp.TimeStamp.get_timestamp()} Updating {
               args.domain} A record to {currentIp.ip}")
 
     godaddy_connector.update_a_record(
@@ -34,4 +34,4 @@ if currentIp.ip != recordIp.ip:
     )
 else:
     if args.verbose:
-        print(timestamp.get_timestamp(), "No update required")
+        print(timestamp.TimeStamp.get_timestamp(), "No update required")

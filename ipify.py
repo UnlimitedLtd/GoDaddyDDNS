@@ -17,7 +17,7 @@ class IP:
     ip: str
 
 
-class IPify:  # pylint: disable=too-few-public-methods
+class IPify(timestamp.TimeStamp):  # pylint: disable=too-few-public-methods
     """Interact with the IPify REST API. For more information see https://www.ipify.org"""
 
     _IPIFY_API_ENDPOINT = "https://api.ipify.org/?format=json"
@@ -36,7 +36,7 @@ class IPify:  # pylint: disable=too-few-public-methods
             timeout=self.timeout
         )
         if self.verbose:
-            print(timestamp.get_timestamp(),
+            print(self.get_timestamp(),
                   response.request.url, response.status_code)
 
         response.raise_for_status()

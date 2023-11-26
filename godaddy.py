@@ -6,7 +6,7 @@ import pydantic
 import timestamp
 
 
-class GoDaddy:
+class GoDaddy(timestamp.TimeStamp):
     """Interact with the GoDaddy REST API. For more information see https://developer.godaddy.com"""
 
     _GODADDY_API_ENDPOINT = "https://api.godaddy.com/v1/domains/{domain}/records/A/@"
@@ -44,7 +44,7 @@ class GoDaddy:
             headers=self.headers
         )
         if self.verbose:
-            print(timestamp.get_timestamp(),
+            print(self.get_timestamp(),
                   response.request.url, response.status_code)
 
         response.raise_for_status()
@@ -86,7 +86,7 @@ class GoDaddy:
             ]
         )
         if self.verbose:
-            print(timestamp.get_timestamp(),
+            print(self.get_timestamp(),
                   response.request.url, response.status_code)
 
         response.raise_for_status()
