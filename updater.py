@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument("domain", help="The domain to check and update", type=str)
 parser.add_argument("api_key", help="GoDaddy API key", type=str)
-parser.add_argument("api_secret", "GoDaddy API secret", type=str)
+parser.add_argument("api_secret", help="GoDaddy API secret", type=str)
 parser.add_argument("--ttl", help="DNS TTL", default=600, type=int)
 parser.add_argument("--timeout", help="Request timeout", default=10, type=int)
 parser.add_argument("-v", "--verbose", help="Verbose", action="store_true")
