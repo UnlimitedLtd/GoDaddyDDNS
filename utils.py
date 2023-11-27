@@ -3,8 +3,11 @@
 from datetime import datetime
 
 
-def timestamp():
-    """Get a UTC timestamp"""
+def timestamp() -> str:
+    """Get a UTC timestamp in format [%Y-%m-%dT%H:%M:%SZ]
+
+    :return: A UTC timestamp
+    """
     return datetime.utcnow().strftime("[%Y-%m-%dT%H:%M:%SZ]")
 
 

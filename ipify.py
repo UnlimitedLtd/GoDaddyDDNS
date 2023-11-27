@@ -1,6 +1,7 @@
 """Interact with the IPify REST API. For more information see https://www.ipify.org"""
 
-from dataclasses import dataclass
+import asyncio
+import dataclasses
 import requests
 import pydantic
 import utils
@@ -11,7 +12,7 @@ class IPifyResponseModel(pydantic.BaseModel):
     ip: str
 
 
-@dataclass
+@dataclasses.dataclass
 class IP:
     """Holds IP information"""
     ip: str
@@ -26,7 +27,7 @@ class IPify(utils.Verbose):  # pylint: disable=too-few-public-methods
         self.timeout = timeout
         super().__init__(verbose)
 
-    def get_current_ip(self) -> IP:
+    async def get_current_ip(self) -> IP:
         """Get current IP address
 
         :return: Current IP address object

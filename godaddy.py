@@ -1,6 +1,7 @@
 """Interact with the GoDaddy REST API. For more information see https://developer.godaddy.com"""
 
-from dataclasses import dataclass
+import asyncio
+import dataclasses
 import requests
 import pydantic
 import utils
@@ -14,7 +15,7 @@ class ARecordResponseModel(pydantic.BaseModel):
     type: str
 
 
-@dataclass
+@dataclasses.dataclass
 class ARecord:
     """Holds data for a domain's DNS A record"""
     ip: str
@@ -34,7 +35,7 @@ class GoDaddy(utils.Verbose):
         }
         super().__init__(verbose)
 
-    def get_a_record(self, domain: str) -> ARecord:
+    async def get_a_record(self, domain: str) -> ARecord:
         """Get a domain's DNS A record
 
         :param domain: Domain to get A record for
@@ -67,7 +68,7 @@ class GoDaddy(utils.Verbose):
 
         return a_record
 
-    def update_a_record(self, domain: str, ip: str, ttl: int = 600) -> None:
+    async def update_a_record(self, domain: str, ip: str, ttl: int = 600) -> None:
         """Update a domain DNS A record
 
         :param domain: Domain to update DNS A record for
