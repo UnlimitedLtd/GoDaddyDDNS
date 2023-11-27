@@ -1,7 +1,7 @@
 """Interact with the GoDaddy REST API. For more information see https://developer.godaddy.com"""
 
-import asyncio
 import dataclasses
+import retry
 import requests
 import pydantic
 import utils
@@ -35,6 +35,7 @@ class GoDaddy(utils.Verbose):
         }
         super().__init__(verbose)
 
+    @retry.retry(exceptions=requests.Timeout, tries=2, delay=1)
     async def get_a_record(self, domain: str) -> ARecord:
         """Get a domain's DNS A record
 
@@ -56,7 +57,7 @@ class GoDaddy(utils.Verbose):
             raise ValueError(
                 "No A records were found."
             )
-        if not len(parsed) == 1:
+        if len(parsed) != 1:
             raise NotImplementedError(
                 "More than one A record present. Multiple A records not currently supported."
             )
@@ -68,6 +69,7 @@ class GoDaddy(utils.Verbose):
 
         return a_record
 
+    @retry.retry(exceptions=requests.Timeout, tries=2, delay=1)
     async def update_a_record(self, domain: str, ip: str, ttl: int = 600) -> None:
         """Update a domain DNS A record
 

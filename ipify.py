@@ -1,7 +1,7 @@
 """Interact with the IPify REST API. For more information see https://www.ipify.org"""
 
-import asyncio
 import dataclasses
+import retry
 import requests
 import pydantic
 import utils
@@ -27,6 +27,7 @@ class IPify(utils.Verbose):  # pylint: disable=too-few-public-methods
         self.timeout = timeout
         super().__init__(verbose)
 
+    @retry.retry(exceptions=requests.Timeout, tries=2, delay=1)
     async def get_current_ip(self) -> IP:
         """Get current IP address
 
