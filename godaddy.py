@@ -4,7 +4,9 @@ import dataclasses
 import retry
 import requests
 import pydantic
-import utils
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ARecordResponseModel(pydantic.BaseModel):
@@ -22,7 +24,7 @@ class ARecord:
     ttl: int
 
 
-class GoDaddy(utils.Verbose):
+class GoDaddy():
     """Interact with the GoDaddy REST API. For more information see https://developer.godaddy.com"""
 
     _GODADDY_API_ENDPOINT = "https://api.godaddy.com/v1/domains/{domain}/records/A/@"
@@ -47,7 +49,7 @@ class GoDaddy(utils.Verbose):
             timeout=self.timeout,
             headers=self.headers
         )
-        self.printer(f"{response.request.url} {response.status_code}")
+        logger.debug("Request url: {}, Status Code: {}".format(response.request.url, response.status_code))
 
         response.raise_for_status()
 
@@ -88,6 +90,6 @@ class GoDaddy(utils.Verbose):
                 }
             ]
         )
-        self.printer(f"{response.request.url} {response.status_code}")
+        logger.debug("Request url: {}, Status Code: {}".format(response.request.url, response.status_code))
 
         response.raise_for_status()
