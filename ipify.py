@@ -1,20 +1,24 @@
 """Interact with the IPify REST API. For more information see https://www.ipify.org"""
 
 import dataclasses
-import retry
-import requests
+
 import pydantic
+import requests
+import retry
+
 import utils
 
 
 class IPifyResponseModel(pydantic.BaseModel):
     """Response body from IPify"""
+
     ip: str
 
 
 @dataclasses.dataclass
 class IP:
     """Holds IP information"""
+
     ip: str
 
 
@@ -33,10 +37,7 @@ class IPify(utils.Verbose):  # pylint: disable=too-few-public-methods
 
         :return: Current IP address object
         """
-        response = requests.get(
-            url=self._IPIFY_API_ENDPOINT,
-            timeout=self.timeout
-        )
+        response = requests.get(url=self._IPIFY_API_ENDPOINT, timeout=self.timeout)
         self.printer(f"{response.request.url} {response.status_code}")
 
         response.raise_for_status()
