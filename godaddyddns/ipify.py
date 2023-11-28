@@ -6,7 +6,7 @@ import pydantic
 import requests
 import retry
 
-import utils
+from godaddyddns import utils
 
 
 class IPifyResponseModel(pydantic.BaseModel):
