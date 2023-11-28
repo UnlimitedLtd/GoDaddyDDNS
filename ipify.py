@@ -24,11 +24,11 @@ class IPify(utils.Verbose):  # pylint: disable=too-few-public-methods
     _IPIFY_API_ENDPOINT = "https://api.ipify.org/?format=json"
 
     def __init__(self, timeout: int = 10, verbose: bool = False):
-        self.timeout = timeout
         super().__init__(verbose)
+        self.timeout = timeout
 
     @retry.retry(exceptions=requests.Timeout, tries=2, delay=1)
-    async def get_current_ip(self) -> IP:
+    def get_current_ip(self) -> IP:
         """Get current IP address
 
         :return: Current IP address object

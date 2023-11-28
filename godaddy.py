@@ -28,15 +28,15 @@ class GoDaddy(utils.Verbose):
     _GODADDY_API_ENDPOINT = "https://api.godaddy.com/v1/domains/{domain}/records/A/@"
 
     def __init__(self, api_key: str, api_secret: str, timeout: int = 10, verbose: bool = False):
+        super().__init__(verbose)
         self.timeout = timeout
         self.headers = {
             "Authorization": f"sso-key {api_key}:{api_secret}",
             "Content-Type": "application/json"
         }
-        super().__init__(verbose)
 
     @retry.retry(exceptions=requests.Timeout, tries=2, delay=1)
-    async def get_a_record(self, domain: str) -> ARecord:
+    def get_a_record(self, domain: str) -> ARecord:
         """Get a domain's DNS A record
 
         :param domain: Domain to get A record for
@@ -70,7 +70,7 @@ class GoDaddy(utils.Verbose):
         return a_record
 
     @retry.retry(exceptions=requests.Timeout, tries=2, delay=1)
-    async def update_a_record(self, domain: str, ip: str, ttl: int = 600) -> None:
+    def update_a_record(self, domain: str, ip: str, ttl: int = 600) -> None:
         """Update a domain DNS A record
 
         :param domain: Domain to update DNS A record for
