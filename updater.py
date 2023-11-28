@@ -1,9 +1,10 @@
 #! /usr/bin/env python3
 
-import concurrent.futures
 import argparse
-import ipify
+import concurrent.futures
+
 import godaddy
+import ipify
 import utils
 
 parser = argparse.ArgumentParser(
@@ -20,21 +21,17 @@ args = parser.parse_args()
 
 verbose = utils.Verbose(verbose=args.verbose)
 
-ipify_connector = ipify.IPify(
-    timeout=args.timeout,
-    verbose=args.verbose
-)
+ipify_connector = ipify.IPify(timeout=args.timeout, verbose=args.verbose)
 
 godaddy_connector = godaddy.GoDaddy(
     api_key=args.api_key,
     api_secret=args.api_secret,
     timeout=args.timeout,
-    verbose=args.verbose
+    verbose=args.verbose,
 )
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-    record_task = executor.submit(
-        godaddy_connector.get_a_record, domain=args.domain)
+    record_task = executor.submit(godaddy_connector.get_a_record, domain=args.domain)
     current_task = executor.submit(ipify_connector.get_current_ip)
 
     record = record_task.result()
@@ -46,10 +43,6 @@ verbose.printer(f"Current Machine IP: {current.ip}")
 
 if current.ip != record.ip:
     verbose.printer(f"Updating {args.domain} A record to {current.ip}")
-    godaddy_connector.update_a_record(
-        domain=args.domain,
-        ip=current.ip,
-        ttl=args.ttl
-    )
+    godaddy_connector.update_a_record(domain=args.domain, ip=current.ip, ttl=args.ttl)
 else:
     verbose.printer("No update required")
