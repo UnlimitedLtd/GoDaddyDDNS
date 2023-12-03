@@ -3,9 +3,9 @@
 import argparse
 import concurrent.futures
 
-import godaddy
-import ipify
-import utils
+import godaddyddns.godaddy as godaddy
+import godaddyddns.ipify as ipify
+import godaddyddns.utils as utils
 
 parser = argparse.ArgumentParser(
     description="Check current domain A record and update if necessary"
