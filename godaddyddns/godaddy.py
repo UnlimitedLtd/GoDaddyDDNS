@@ -33,9 +33,8 @@ class GoDaddy:
     _GODADDY_API_ENDPOINT = "https://api.godaddy.com/v1/domains/{domain}/records/A/@"
 
     def __init__(
-        self, api_key: str, api_secret: str, timeout: int = 10, verbose: bool = False
+        self, api_key: str, api_secret: str, timeout: int = 10
     ):
-        super().__init__(verbose)
         self.timeout = timeout
         self.headers = {
             "Authorization": f"sso-key {api_key}:{api_secret}",

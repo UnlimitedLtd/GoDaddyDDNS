@@ -18,17 +18,15 @@ parser.add_argument("--timeout", help="Request timeout", default=10, type=int)
 parser.add_argument("-v", "--verbose", help="Verbose", action="store_true")
 args = parser.parse_args()
 
+
+logging.basicConfig(
+    format="%(asctime)s:%(levelname)s:%(message)s",
+    level=logging.INFO,
+    datefmt="%m/%d/%Y %I:%M:%S",
+)
 if args.verbose:
     logging.basicConfig(
-        format="%(asctime) s%(levelname)s:%(message)s",
         level=logging.DEBUG,
-        datefmt="%m/%d/%Y %I:%M:%S",
-    )
-else:
-    logging.basicConfig(
-        format="%(asctime) s%(levelname)s:%(message)s",
-        level=logging.INFO,
-        datefmt="%m/%d/%Y %I:%M:%S",
     )
 
 logger = logging.getLogger(__name__)
