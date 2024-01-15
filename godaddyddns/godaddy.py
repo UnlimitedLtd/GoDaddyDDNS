@@ -1,13 +1,13 @@
 """Interact with the GoDaddy REST API. For more information see https://developer.godaddy.com"""
 
 import dataclasses
-
-import pydantic
 import logging
 
-logger = logging.getLogger(__name__)
+import pydantic
 import requests
 import retry
+
+logger = logging.getLogger(__name__)
 
 
 class ARecordResponseModel(pydantic.BaseModel):
@@ -27,7 +27,7 @@ class ARecord:
     ttl: int
 
 
-class GoDaddy():
+class GoDaddy:
     """Interact with the GoDaddy REST API. For more information see https://developer.godaddy.com"""
 
     _GODADDY_API_ENDPOINT = "https://api.godaddy.com/v1/domains/{domain}/records/A/@"
@@ -54,8 +54,11 @@ class GoDaddy():
             timeout=self.timeout,
             headers=self.headers,
         )
-        logger.debug("Request url: {}, Status Code: {}".format(
-            response.request.url, response.status_code))
+        logger.debug(
+            "Request url: {}, Status Code: {}".format(
+                response.request.url, response.status_code
+            )
+        )
 
         response.raise_for_status()
 
@@ -87,7 +90,10 @@ class GoDaddy():
             headers=self.headers,
             json=[{"data": ip, "ttl": ttl}],
         )
-        logger.debug("Request url: {}, Status Code: {}".format(
-            response.request.url, response.status_code))
+        logger.debug(
+            "Request url: {}, Status Code: {}".format(
+                response.request.url, response.status_code
+            )
+        )
 
         response.raise_for_status()

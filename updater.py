@@ -2,6 +2,7 @@
 
 import argparse
 import concurrent.futures
+import logging
 
 import godaddyddns.godaddy as godaddy
 import godaddyddns.ipify as ipify
@@ -18,9 +19,17 @@ parser.add_argument("-v", "--verbose", help="Verbose", action="store_true")
 args = parser.parse_args()
 
 if args.verbose:
-    logging.basicConfig(format='%(asctime) s%(levelname)s:%(message)s', level=logging.DEBUG, datefmt='%m/%d/%Y %I:%M:%S')
+    logging.basicConfig(
+        format="%(asctime) s%(levelname)s:%(message)s",
+        level=logging.DEBUG,
+        datefmt="%m/%d/%Y %I:%M:%S",
+    )
 else:
-    logging.basicConfig(format='%(asctime) s%(levelname)s:%(message)s', level=logging.INFO, datefmt='%m/%d/%Y %I:%M:%S')
+    logging.basicConfig(
+        format="%(asctime) s%(levelname)s:%(message)s",
+        level=logging.INFO,
+        datefmt="%m/%d/%Y %I:%M:%S",
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -48,10 +57,6 @@ logger.debug("Current Machine IP: {}".format(current.ip))
 
 if current.ip != record.ip:
     logger.debug("Updating {} A record to {}".format(args.domain, current.ip))
-    godaddy_connector.update_a_record(
-        domain=args.domain,
-        ip=current.ip,
-        ttl=args.ttl
-    )
+    godaddy_connector.update_a_record(domain=args.domain, ip=current.ip, ttl=args.ttl)
 else:
     logger.debug("No update required")
