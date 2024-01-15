@@ -1,11 +1,10 @@
 #! /usr/bin/env python3
 
-import concurrent.futures
 import argparse
-import ipify
-import godaddy
-import logging
+import concurrent.futures
 
+import godaddyddns.godaddy as godaddy
+import godaddyddns.ipify as ipify
 
 parser = argparse.ArgumentParser(
     description="Check current domain A record and update if necessary"
@@ -36,8 +35,7 @@ godaddy_connector = godaddy.GoDaddy(
 )
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-    record_task = executor.submit(
-        godaddy_connector.get_a_record, domain=args.domain)
+    record_task = executor.submit(godaddy_connector.get_a_record, domain=args.domain)
     current_task = executor.submit(ipify_connector.get_current_ip)
 
     record = record_task.result()

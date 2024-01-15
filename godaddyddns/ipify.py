@@ -1,22 +1,26 @@
 """Interact with the IPify REST API. For more information see https://www.ipify.org"""
 
 import dataclasses
-import retry
-import requests
+
 import pydantic
 import logging
 
 logger = logging.getLogger(__name__)
+import requests
+import retry
+
 
 
 class IPifyResponseModel(pydantic.BaseModel):
     """Response body from IPify"""
+
     ip: str
 
 
 @dataclasses.dataclass
 class IP:
     """Holds IP information"""
+
     ip: str
 
 
