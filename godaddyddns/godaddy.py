@@ -1,12 +1,13 @@
 """Interact with the GoDaddy REST API. For more information see https://developer.godaddy.com"""
 
 import dataclasses
+import logging
 
 import pydantic
 import requests
 import retry
 
-from godaddyddns import utils
+logger = logging.getLogger(__name__)
 
 
 class ARecordResponseModel(pydantic.BaseModel):
@@ -26,15 +27,12 @@ class ARecord:
     ttl: int
 
 
-class GoDaddy(utils.Verbose):
+class GoDaddy:
     """Interact with the GoDaddy REST API. For more information see https://developer.godaddy.com"""
 
     _GODADDY_API_ENDPOINT = "https://api.godaddy.com/v1/domains/{domain}/records/A/@"
 
-    def __init__(
-        self, api_key: str, api_secret: str, timeout: int = 10, verbose: bool = False
-    ):
-        super().__init__(verbose)
+    def __init__(self, api_key: str, api_secret: str, timeout: int = 10):
         self.timeout = timeout
         self.headers = {
             "Authorization": f"sso-key {api_key}:{api_secret}",
@@ -53,7 +51,11 @@ class GoDaddy(utils.Verbose):
             timeout=self.timeout,
             headers=self.headers,
         )
-        self.printer(f"{response.request.url} {response.status_code}")
+        logger.debug(
+            "Request URL: %s, Status Code: %d",
+            response.request.url,
+            response.status_code,
+        )
 
         response.raise_for_status()
 
@@ -85,6 +87,10 @@ class GoDaddy(utils.Verbose):
             headers=self.headers,
             json=[{"data": ip, "ttl": ttl}],
         )
-        self.printer(f"{response.request.url} {response.status_code}")
+        logger.debug(
+            "Request URL: %s, Status Code: %d",
+            response.request.url,
+            response.status_code,
+        )
 
         response.raise_for_status()

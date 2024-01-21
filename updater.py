@@ -2,10 +2,10 @@
 
 import argparse
 import concurrent.futures
+import logging
 
 import godaddyddns.godaddy as godaddy
 import godaddyddns.ipify as ipify
-import godaddyddns.utils as utils
 
 parser = argparse.ArgumentParser(
     description="Check current domain A record and update if necessary"
@@ -19,15 +19,25 @@ parser.add_argument("-v", "--verbose", help="Verbose", action="store_true")
 args = parser.parse_args()
 
 
-verbose = utils.Verbose(verbose=args.verbose)
+logging.basicConfig(
+    format="%(asctime)s:%(levelname)s:%(message)s",
+    level=logging.INFO,
+    datefmt="%m/%d/%Y %I:%M:%S",
+)
 
-ipify_connector = ipify.IPify(timeout=args.timeout, verbose=args.verbose)
+logger = logging.getLogger(__name__)
+
+if args.verbose:
+    logger.setLevel(logging.DEBUG)
+
+ipify_connector = ipify.IPify(
+    timeout=args.timeout,
+)
 
 godaddy_connector = godaddy.GoDaddy(
     api_key=args.api_key,
     api_secret=args.api_secret,
     timeout=args.timeout,
-    verbose=args.verbose,
 )
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
@@ -37,12 +47,13 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
     record = record_task.result()
     current = current_task.result()
 
-verbose.printer(f"{args.domain} A Record IP: {record.ip}")
+logger.debug("Domain: %s, A Record IP: %s", args.domain, record.ip)
 
-verbose.printer(f"Current Machine IP: {current.ip}")
+logger.debug("Current Machine IP: %s", current.ip)
+
 
 if current.ip != record.ip:
-    verbose.printer(f"Updating {args.domain} A record to {current.ip}")
+    logger.debug("Updating %s A record to %s", args.domain, current.ip)
     godaddy_connector.update_a_record(domain=args.domain, ip=current.ip, ttl=args.ttl)
 else:
-    verbose.printer("No update required")
+    logger.debug("No update required")
