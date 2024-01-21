@@ -24,12 +24,11 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt="%m/%d/%Y %I:%M:%S",
 )
-if args.verbose:
-    logging.basicConfig(
-        level=logging.DEBUG,
-    )
 
 logger = logging.getLogger(__name__)
+
+if args.verbose:
+    logger.setLevel(logging.DEBUG)
 
 ipify_connector = ipify.IPify(
     timeout=args.timeout,
