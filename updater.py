@@ -22,7 +22,7 @@ args = parser.parse_args()
 logging.basicConfig(
     format="%(asctime)s:%(levelname)s:%(message)s",
     level=logging.INFO,
-    datefmt="%m/%d/%Y %I:%M:%S",
+    datefmt="%m/%d/%Y %H:%M:%S",
 )
 
 logger = logging.getLogger(__name__)
