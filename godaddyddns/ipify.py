@@ -39,9 +39,9 @@ class IPify:  # pylint: disable=too-few-public-methods
         """
         response = requests.get(url=self._IPIFY_API_ENDPOINT, timeout=self.timeout)
         logger.debug(
-            "Request url: {}, Status Code: {}".format(
-                response.request.url, response.status_code
-            )
+            "Request URL: %s, Status Code: %d",
+            response.request.url,
+            response.status_code,
         )
 
         response.raise_for_status()

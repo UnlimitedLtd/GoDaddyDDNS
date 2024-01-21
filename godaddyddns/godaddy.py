@@ -32,9 +32,7 @@ class GoDaddy:
 
     _GODADDY_API_ENDPOINT = "https://api.godaddy.com/v1/domains/{domain}/records/A/@"
 
-    def __init__(
-        self, api_key: str, api_secret: str, timeout: int = 10
-    ):
+    def __init__(self, api_key: str, api_secret: str, timeout: int = 10):
         self.timeout = timeout
         self.headers = {
             "Authorization": f"sso-key {api_key}:{api_secret}",
@@ -54,9 +52,9 @@ class GoDaddy:
             headers=self.headers,
         )
         logger.debug(
-            "Request url: {}, Status Code: {}".format(
-                response.request.url, response.status_code
-            )
+            "Request URL: %s, Status Code: %d",
+            response.request.url,
+            response.status_code,
         )
 
         response.raise_for_status()
@@ -90,9 +88,9 @@ class GoDaddy:
             json=[{"data": ip, "ttl": ttl}],
         )
         logger.debug(
-            "Request url: {}, Status Code: {}".format(
-                response.request.url, response.status_code
-            )
+            "Request URL: %s, Status Code: %d",
+            response.request.url,
+            response.status_code,
         )
 
         response.raise_for_status()
