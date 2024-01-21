@@ -5,7 +5,6 @@ import logging
 
 import pydantic
 import requests
-import retry
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +30,6 @@ class IPify:  # pylint: disable=too-few-public-methods
     def __init__(self, timeout: int = 10):
         self.timeout = timeout
 
-    @retry.retry(exceptions=requests.Timeout, tries=2, delay=1)
     def get_current_ip(self) -> IP:
         """Get current IP address
 
