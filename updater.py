@@ -48,13 +48,13 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
     record = record_task.result()
     current = current_task.result()
 
-logger.debug("Domain: {}, A Record IP: {}".format(args.domain, record.ip))
+logger.debug("Domain: %s, A Record IP: %s", args.domain, record.ip)
 
-logger.debug("Current Machine IP: {}".format(current.ip))
+logger.debug("Current Machine IP: %s", current.ip)
 
 
 if current.ip != record.ip:
-    logger.debug("Updating {} A record to {}".format(args.domain, current.ip))
+    logger.debug("Updating %s A record to %s", args.domain, current.ip)
     godaddy_connector.update_a_record(domain=args.domain, ip=current.ip, ttl=args.ttl)
 else:
     logger.debug("No update required")
