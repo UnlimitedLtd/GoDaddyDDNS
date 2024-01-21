@@ -5,7 +5,6 @@ import logging
 
 import pydantic
 import requests
-import retry
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +38,6 @@ class GoDaddy:
             "Content-Type": "application/json",
         }
 
-    @retry.retry(exceptions=requests.Timeout, tries=2, delay=1)
     def get_a_record(self, domain: str) -> ARecord:
         """Get a domain's DNS A record
 
@@ -73,7 +71,6 @@ class GoDaddy:
 
         return a_record
 
-    @retry.retry(exceptions=requests.Timeout, tries=2, delay=1)
     def update_a_record(self, domain: str, ip: str, ttl: int = 600) -> None:
         """Update a domain DNS A record
 
