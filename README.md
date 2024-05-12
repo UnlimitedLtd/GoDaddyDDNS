@@ -5,7 +5,7 @@ Unfortunately this means GoDaddy is no longer a viable Domain provider for the a
 
 This repo will be **archived** and there will be no further updates.
 
-If you're looking for a simple DDNS system, you can check our our new repo for [PorkBunDDNS](https://github.com/UnlimitedLtd/PorkBunDDNS).
+If you're looking for a simple DDNS system, you can check out our new repo for [PorkBunDDNS](https://github.com/UnlimitedLtd/PorkBunDDNS).
 
 
 # Original README
