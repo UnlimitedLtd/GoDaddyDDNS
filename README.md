@@ -1,7 +1,7 @@
 # UPDATE May 12th 2024
 GoDaddy have updated the terms of use for their Management and DNS APIs. Usage is limited to accounts with 10 or more domains and/or an active Premium Discount Domain Club plan.
 
-Unfortunately this means GoDaddy is no longer a viable Domain provider for the author and maintainer of this project.
+Unfortunately this means GoDaddy is no longer a viable Domain provider for the authors of this project.
 
 This repo will be **archived** and there will be no further updates.
 
